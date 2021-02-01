@@ -56,7 +56,7 @@ public class ListaIndices {
         
     }
     
-    public void ingresarCodigo(int modulo, int codigo, String nombre){
+    public void ingresarCodigo(int modulo, int codigo, String nombre, int ubicacion){
         
         NodoIndice q = cabezaIndice;
         
@@ -74,9 +74,8 @@ public class ListaIndices {
 
         }
             
-        q.getCodigos().insertar(codigo, nombre);
+        q.getCodigos().insertar(codigo, nombre, ubicacion);
         q.setTamaño(q.getTamaño()+1);
-        q.getCodigos().imprimir();
             
     }
     
@@ -100,7 +99,6 @@ public class ListaIndices {
             
         q.getCodigos().eliminar(codigo);
         q.setTamaño(q.getTamaño()-1);
-        q.getCodigos().imprimir();
 
     }
 

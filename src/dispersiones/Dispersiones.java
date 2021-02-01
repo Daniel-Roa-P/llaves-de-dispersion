@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
@@ -30,12 +31,12 @@ public class Dispersiones extends JFrame implements ActionListener{
     public JLabel label10 = new JLabel("Ingresar el codigo de la persona a retirar: ");
     
     public JLabel llaveTexto = new JLabel("3");
-    public JLabel sigTexto = new JLabel("1");
+    public JLabel sigTexto = new JLabel("0");
     public JLabel infoTexto = new JLabel("Informacion: ");
     
-    public JTextField tfCodigo = new JTextField("156");
-    public JTextField tfCodigoRetiro = new JTextField("156");
-    public JTextField tfNombre = new JTextField("Manuel");
+    public JTextField tfCodigo = new JTextField("96");
+    public JTextField tfCodigoRetiro = new JTextField("96");
+    public JTextField tfNombre = new JTextField("xf");
     
     public JButton botonIngresar = new JButton("Ingresar");
     public JButton botonRetirar = new JButton("Retirar");
@@ -46,14 +47,15 @@ public class Dispersiones extends JFrame implements ActionListener{
     JScrollPane scrollPane2 = new JScrollPane();
     JScrollPane scrollPane3 = new JScrollPane();
     
-    int llave = 5;
-    
+    int llave = 7;
+    int disponible = 0;
+    JTextArea[][] cursor = new JTextArea[17][4];
     ListaIndices lista = new ListaIndices();
     
     public static void main(String[] args) {
 
         Dispersiones dispersion = new Dispersiones(); 
-        dispersion.setBounds(0, 0, 1100, 650);
+        dispersion.setBounds(0, 0, 1300, 550);
         dispersion.setTitle("Dispersiones - Encadenamiento separado");
         dispersion.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         dispersion.setVisible(true);
@@ -103,7 +105,7 @@ public class Dispersiones extends JFrame implements ActionListener{
         
         llaveTexto.setBounds(870, 25, 30, 20);
         sigTexto.setBounds(210, 125, 20, 20);
-        infoTexto.setBounds(25, 550, 1000, 30);
+        infoTexto.setBounds(25, 450, 1000, 30);
         
         tfNombre.setBounds(550, 48, 145, 20);
         tfCodigo.setBounds(550, 25, 145, 20);
@@ -118,15 +120,90 @@ public class Dispersiones extends JFrame implements ActionListener{
         
         scrollPane.setBounds(25, 150, 2500, 2500);
         scrollPane.setPreferredSize(new Dimension(2500, 2500));  
+        scrollPane.setBackground(Color.gray);
         
-        scrollPane1.setBounds(25, 150, 675, 400);
+        scrollPane1.setBounds(25, 150, 675, 300);
         scrollPane1.setPreferredSize(new Dimension(1150, 400)); 
         
         scrollPane2.setBounds(750, 150, 2500, 2500);
         scrollPane2.setPreferredSize(new Dimension(2500, 2500));  
+        scrollPane2.setBackground(Color.gray);
         
-        scrollPane3.setBounds(750, 150, 290, 400);
+        scrollPane3.setBounds(750, 150, 490, 300);
         scrollPane3.setPreferredSize(new Dimension(1150, 400)); 
+        
+    }
+    
+    public void pintarCursor(){
+        
+        scrollPane.removeAll();
+        
+        JTextArea texto1 = new JTextArea("Codigo");
+        JTextArea texto2 = new JTextArea("Nombre");
+        JTextArea texto3 = new JTextArea("Siguiente");
+        
+        texto1.setBounds(5, 55, 80, 20);
+        texto2.setBounds(5, 105, 80, 20);
+        texto3.setBounds(5, 155, 80, 20);
+        
+        for(int i = 0; i < 17; i++){
+            
+            for(int j = 0; j < 4; j++){
+                
+                if(j==0){
+                
+                    cursor[i][j] = new JTextArea(Integer.toString(i + 1));
+                    
+                } else {
+                    
+                    cursor[i][j] = new JTextArea(" ");
+                    
+                }
+                
+                cursor[i][j].setBounds(90 + (i*35), 5 + (j*50), 30, 20);
+                scrollPane.add(cursor[i][j]);
+                
+            }
+            
+        }
+        
+        NodoIndice indice = lista.getCabezaIndice();
+                    
+        for(int k = 0; k < lista.getTamaño(); k++){
+
+            NodoCodigo codigo = indice.getCodigos().getCabezaCodigo();
+
+            for(int l = 0; l < indice.getTamaño(); l++){
+
+                System.out.println(codigo.getCodigo());
+                
+                cursor[codigo.getUbicacion()][1].setText(Integer.toString(codigo.getCodigo()));
+                cursor[codigo.getUbicacion()][2].setText(codigo.getNombre());
+
+                if(codigo.getSiguiente() != null){
+
+                    cursor[codigo.getUbicacion()][3].setText(Integer.toString(codigo.getSiguiente().getUbicacion() + 1));
+
+                } else {
+
+                    cursor[codigo.getUbicacion()][3].setText("0");
+
+                }
+
+                codigo = codigo.getSiguiente();
+
+            }
+
+            indice = indice.getSiguiente();
+
+        }
+        
+        scrollPane.add(texto1);
+        scrollPane.add(texto2);
+        scrollPane.add(texto3);
+        
+        scrollPane.repaint();
+        scrollPane1.setViewportView(scrollPane);
         
     }
     
@@ -135,8 +212,6 @@ public class Dispersiones extends JFrame implements ActionListener{
         scrollPane2.removeAll();
         
         NodoIndice indice = lista.getCabezaIndice();
-        
-        System.out.println(lista.getTamaño());
         
         for(int i = 0; i < lista.getTamaño(); i++){
             
@@ -158,7 +233,7 @@ public class Dispersiones extends JFrame implements ActionListener{
                 img.setBounds(i*48 , 70 + (j*100), 30, 50);
                 img.setIcon(iconoEscalado);
                 
-                JLabel textoEstudiante = new JLabel(Integer.toString(codigo.getCogigo()));
+                JLabel textoEstudiante = new JLabel(Integer.toString(codigo.getCodigo()));
                 textoEstudiante.setBounds(i*48, 120 + (j*100), 150, 50);
 
                 scrollPane2.add(textoEstudiante);
@@ -208,7 +283,6 @@ public class Dispersiones extends JFrame implements ActionListener{
                 
                 } else {
                     
-                    System.out.println(llave);
                     break;
                     
                 }
@@ -241,10 +315,14 @@ public class Dispersiones extends JFrame implements ActionListener{
             
             int codigo = Integer.parseInt(tfCodigo.getText());
             String nombre = tfNombre.getText();
-
-            lista.ingresarCodigo(codigo%llave, codigo, nombre);
+            
+            lista.ingresarCodigo(codigo%llave, codigo, nombre, disponible);
             
             pintarCabezas();
+            pintarCursor();
+                   
+            disponible = disponible + 1;
+            sigTexto.setText(Integer.toString(disponible));
             
         } else if (e.getSource() == botonRetirar){
         
@@ -253,6 +331,7 @@ public class Dispersiones extends JFrame implements ActionListener{
             lista.eliminarCodigo(codigo%llave, codigo);
             
             pintarCabezas();
+            pintarCursor();
             
         }
         

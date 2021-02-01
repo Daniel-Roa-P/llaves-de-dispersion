@@ -5,9 +5,9 @@ public class ListaCodigos {
   
     private NodoCodigo cabezaCodigo;
     
-    public void insertar(int codigo, String nombre){
+    public void insertar(int codigo, String nombre, int ubicacion){
         
-        NodoCodigo nuevoCodigo = new NodoCodigo(codigo, nombre);
+        NodoCodigo nuevoCodigo = new NodoCodigo(codigo, nombre, ubicacion);
         
         if(cabezaCodigo == null){
         
@@ -18,7 +18,7 @@ public class ListaCodigos {
             NodoCodigo q = cabezaCodigo;
             NodoCodigo s = null;
             
-            while(q != null && q.getCogigo() != codigo){
+            while(q != null && q.getCodigo() != codigo){
                 
                     s=q;        
                     q = q.getSiguiente();
@@ -47,7 +47,7 @@ public class ListaCodigos {
 
         while(q != null){
 
-            if(q.getCogigo() == codigo ){
+            if(q.getCodigo() == codigo ){
 
                 break;
 

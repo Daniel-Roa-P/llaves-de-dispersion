@@ -4,14 +4,15 @@ package dispersiones;
 public class NodoCodigo {
     
     private NodoCodigo siguiente;
-    private int cogigo;
+    private int codigo, ubicacion;
     private String nombre;
     
-    NodoCodigo( int codigo , String nombre ){
+    NodoCodigo( int codigo , String nombre , int ubicacion){
         
-        this.cogigo = codigo;
+        this.codigo = codigo;
         this.nombre = nombre;
         this.siguiente = null;
+        this.ubicacion = ubicacion;
         
     }
 
@@ -31,14 +32,20 @@ public class NodoCodigo {
         this.nombre = nombre;
     }
 
-    public int getCogigo() {
-        return cogigo;
+    public int getCodigo() {
+        return codigo;
     }
 
-    public void setCogigo(int cogigo) {
-        this.cogigo = cogigo;
+    public void setCodigo(int cogigo) {
+        this.codigo = cogigo;
     }
-    
-    
+
+    public int getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(int ubicacion) {
+        this.ubicacion = ubicacion;
+    }
     
 }
