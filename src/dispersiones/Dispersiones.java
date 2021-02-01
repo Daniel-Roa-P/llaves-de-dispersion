@@ -4,8 +4,11 @@ package dispersiones;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -43,6 +46,10 @@ public class Dispersiones extends JFrame implements ActionListener{
     JScrollPane scrollPane2 = new JScrollPane();
     JScrollPane scrollPane3 = new JScrollPane();
     
+    int llave = 5;
+    
+    ListaIndices lista = new ListaIndices();
+    
     public static void main(String[] args) {
 
         Dispersiones dispersion = new Dispersiones(); 
@@ -52,7 +59,7 @@ public class Dispersiones extends JFrame implements ActionListener{
         dispersion.setVisible(true);
 
     }
-
+    
     Dispersiones(){
         
         Container c = getContentPane();
@@ -123,10 +130,131 @@ public class Dispersiones extends JFrame implements ActionListener{
         
     }
     
+    public void pintarCabezas(){
+        
+        scrollPane2.removeAll();
+        
+        NodoIndice indice = lista.getCabezaIndice();
+        
+        System.out.println(lista.getTamaño());
+        
+        for(int i = 0; i < lista.getTamaño(); i++){
+            
+            JLabel textoIndice = new JLabel(Integer.toString(indice.getIndice()));
+            textoIndice.setBounds((i*50) + 5 , 30, 150, 30);
+            
+            scrollPane2.add(textoIndice);
+            
+            NodoCodigo codigo = indice.getCodigos().getCabezaCodigo();
+            
+            for(int j = 0; j < indice.getTamaño(); j++){
+            
+                JLabel img = new JLabel();
+        
+                ImageIcon imgIcon = new ImageIcon(getClass().getResource("Abajo.png"));
+
+                Image imgEscalada = imgIcon.getImage().getScaledInstance(30,50, Image.SCALE_SMOOTH);
+                Icon iconoEscalado = new ImageIcon(imgEscalada);
+                img.setBounds(i*48 , 70 + (j*100), 30, 50);
+                img.setIcon(iconoEscalado);
+                
+                JLabel textoEstudiante = new JLabel(Integer.toString(codigo.getCogigo()));
+                textoEstudiante.setBounds(i*48, 120 + (j*100), 150, 50);
+
+                scrollPane2.add(textoEstudiante);
+                
+                scrollPane2.add(img);
+                
+                codigo = codigo.getSiguiente();
+                
+            }
+            
+            if(i < lista.getTamaño()-1){
+                
+                JLabel img2 = new JLabel();
+        
+                ImageIcon imgIcon = new ImageIcon(getClass().getResource("Derecha.png"));
+
+                Image imgEscalada = imgIcon.getImage().getScaledInstance(45,25, Image.SCALE_SMOOTH);
+                Icon iconoEscalado = new ImageIcon(imgEscalada);
+                img2.setBounds(10 + (i*50) , 30, 45, 25);
+                img2.setIcon(iconoEscalado);
+
+                scrollPane2.add(img2);
+                
+            }
+
+            indice = indice.getSiguiente();
+            
+        }
+        
+        scrollPane2.repaint();
+        scrollPane3.setViewportView(scrollPane2);
+        
+    }
+    
+    void calcularNuevaLlave(){
+        
+        llave = llave + 2;
+        int divisor = 3;
+        
+        while(true){
+            
+            if( (llave % divisor) != 0 || llave == divisor){
+            
+                if( llave != divisor ){
+                
+                    divisor = divisor + 2;
+                
+                } else {
+                    
+                    System.out.println(llave);
+                    break;
+                    
+                }
+                                            
+            } else {
+                            
+            llave = llave + 2;
+            divisor = 3;
+            
+            }
+        }
+        
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        if(e.getSource() == botonIngresar){
 
+            if(lista.getTamaño()==0){
+                
+                for(int i = 0; i<llave; i++){
+
+                    
+                    lista.insertar(i);
+
+                }
+
+            }
+            
+            int codigo = Integer.parseInt(tfCodigo.getText());
+            String nombre = tfNombre.getText();
+
+            lista.ingresarCodigo(codigo%llave, codigo, nombre);
+            
+            pintarCabezas();
+            
+        } else if (e.getSource() == botonRetirar){
+        
+            int codigo = Integer.parseInt(tfCodigoRetiro.getText());
+
+            lista.eliminarCodigo(codigo%llave, codigo);
+            
+            pintarCabezas();
+            
+        }
         
     }
     
