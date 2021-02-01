@@ -47,9 +47,9 @@ public class Dispersiones extends JFrame implements ActionListener{
     JScrollPane scrollPane2 = new JScrollPane();
     JScrollPane scrollPane3 = new JScrollPane();
     
-    int llave = 7;
+    int llave = 3;
     int disponible = 0;
-    JTextArea[][] cursor = new JTextArea[17][4];
+    JTextArea[][] cursor = new JTextArea[llave*2][4];
     ListaIndices lista = new ListaIndices();
     
     public static void main(String[] args) {
@@ -146,7 +146,7 @@ public class Dispersiones extends JFrame implements ActionListener{
         texto2.setBounds(5, 105, 80, 20);
         texto3.setBounds(5, 155, 80, 20);
         
-        for(int i = 0; i < 17; i++){
+        for(int i = 0; i < llave*2; i++){
             
             for(int j = 0; j < 4; j++){
                 
@@ -156,7 +156,7 @@ public class Dispersiones extends JFrame implements ActionListener{
                     
                 } else {
                     
-                    cursor[i][j] = new JTextArea(" ");
+                    cursor[i][j] = new JTextArea("-");
                     
                 }
                 
@@ -268,6 +268,29 @@ public class Dispersiones extends JFrame implements ActionListener{
         
     }
     
+    void calcularDisponible(){
+        
+        for(int i = 0; i < llave*2; i++){
+             
+            System.out.println(cursor[i][3].getText());
+            
+            if(cursor[i][3].getText().equals("-")){
+                
+                disponible = i;
+                break;
+            
+            }
+            
+        }
+        
+        if (disponible == llave*2){
+            
+            calcularNuevaLlave();
+            
+        }
+            
+    }
+    
     void calcularNuevaLlave(){
         
         llave = llave + 2;
@@ -320,18 +343,21 @@ public class Dispersiones extends JFrame implements ActionListener{
             
             pintarCabezas();
             pintarCursor();
-                   
-            disponible = disponible + 1;
+            calcularDisponible();
+            
             sigTexto.setText(Integer.toString(disponible));
             
-        } else if (e.getSource() == botonRetirar){
+        } else if (e.getSource() == botonRetirar && lista.getTamaño() != 0){
         
             int codigo = Integer.parseInt(tfCodigoRetiro.getText());
 
             lista.eliminarCodigo(codigo%llave, codigo);
-            
+
             pintarCabezas();
             pintarCursor();
+            calcularDisponible();
+            
+            sigTexto.setText(Integer.toString(disponible + 1));
             
         }
         

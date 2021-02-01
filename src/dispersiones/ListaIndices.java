@@ -75,7 +75,7 @@ public class ListaIndices {
         }
             
         q.getCodigos().insertar(codigo, nombre, ubicacion);
-        q.setTamaño(q.getTamaño()+1);
+        q.setTamaño(calcularTamaño(q.getCodigos()));
             
     }
     
@@ -98,10 +98,27 @@ public class ListaIndices {
         }
             
         q.getCodigos().eliminar(codigo);
-        q.setTamaño(q.getTamaño()-1);
+        q.setTamaño(calcularTamaño(q.getCodigos()));
 
     }
 
+    public int calcularTamaño(ListaCodigos cod){
+        
+        NodoCodigo q = cod.getCabezaCodigo();
+        
+        int tamañoCodigos = 0;
+        
+        while(q != null){
+
+            q = q.getSiguiente();
+            tamañoCodigos++;
+
+        }
+        
+        return tamañoCodigos;
+        
+    }
+    
     public NodoIndice getCabezaIndice() {
         return cabezaIndice;
     }
