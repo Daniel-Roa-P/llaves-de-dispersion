@@ -31,7 +31,7 @@ public class Dispersiones extends JFrame implements ActionListener{
     public JLabel label10 = new JLabel("Ingresar el codigo de la persona a retirar: ");
     
     public JLabel llaveTexto = new JLabel("3");
-    public JLabel sigTexto = new JLabel("0");
+    public JLabel sigTexto = new JLabel("1");
     public JLabel infoTexto = new JLabel("Informacion: ");
     
     public JTextField tfCodigo = new JTextField("96");
@@ -270,9 +270,9 @@ public class Dispersiones extends JFrame implements ActionListener{
     
     void calcularDisponible(){
         
-        for(int i = 0; i < llave*2; i++){
-             
-            System.out.println(cursor[i][3].getText());
+        int i;
+        
+        for(i = 0; i < llave*2; i++){
             
             if(cursor[i][3].getText().equals("-")){
                 
@@ -283,12 +283,57 @@ public class Dispersiones extends JFrame implements ActionListener{
             
         }
         
-        if (disponible == llave*2){
+        if (i == llave*2){
             
-            calcularNuevaLlave();
+            rehash();
             
         }
             
+    }
+    
+    void rehash(){
+        
+        String [][] temp = new String[llave*2][2];
+        
+        for(int i = 0; i < llave*2; i++){
+        
+            temp[i][0] = cursor[i][1].getText(); 
+            temp[i][1] = cursor[i][2].getText();
+                    
+        }
+        
+        int anteriorLlave = llave;
+        calcularNuevaLlave();
+        llaveTexto.setText(Integer.toString(llave));
+        cursor = new JTextArea[llave*2][4];
+        
+        lista = new ListaIndices();
+        
+        for(int i = 0; i<llave; i++){
+
+            lista.insertar(i);
+
+        }
+        
+        disponible = 0;
+
+        for(int i = 0; i < anteriorLlave*2; i++){
+        
+            int codigo = Integer.parseInt(temp[i][0]);  
+
+            lista.ingresarCodigo(codigo%llave, codigo, temp[i][1], disponible);
+            
+            disponible++;
+            
+        }
+        
+
+        pintarCabezas();
+        pintarCursor();
+        calcularDisponible();
+
+        sigTexto.setText(Integer.toString(disponible));
+        
     }
     
     void calcularNuevaLlave(){
@@ -329,7 +374,6 @@ public class Dispersiones extends JFrame implements ActionListener{
                 
                 for(int i = 0; i<llave; i++){
 
-                    
                     lista.insertar(i);
 
                 }
@@ -345,7 +389,7 @@ public class Dispersiones extends JFrame implements ActionListener{
             pintarCursor();
             calcularDisponible();
             
-            sigTexto.setText(Integer.toString(disponible));
+            sigTexto.setText(Integer.toString(disponible + 1));
             
         } else if (e.getSource() == botonRetirar && lista.getTamaño() != 0){
         
